@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smile Detector</title>
+  </head>
+  <body>
+    <h1>Smile Detector</h1>
+    <input type="file" id="imageUpload" accept="image/*" />
+    <button onclick="uploadImage()">Detect Smile</button>
+    <p id="result"></p>
+
+    <script>
+      function uploadImage() {
+        const imageFile = document.getElementById("imageUpload").files[0];
+        const formData = new FormData();
+        formData.append("image", imageFile);
+
+        fetch("/detect_smile", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const resultText = data.smile_detected
+              ? "Smile detected!"
+              : "No smile detected.";
+            document.getElementById("result").innerText = resultText;
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+    </script>
+  </body>
+</html>
